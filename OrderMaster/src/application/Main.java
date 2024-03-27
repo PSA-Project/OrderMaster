@@ -3,6 +3,8 @@ package application;
 import dashboard.Dashboard;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import menu.MenuUI;
+import order.OrderUI;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
@@ -11,6 +13,8 @@ public class Main extends Application {
 	private static Stage stage;
 	
 	private static Dashboard dashboard;
+	private static MenuUI menu;
+	private static OrderUI order;
 	
 	@Override
 	public void start(Stage primaryStage) {		
@@ -36,5 +40,11 @@ public class Main extends Application {
 	
 	public static void initialize() {
 		dashboard = new Dashboard();
+		menu = new MenuUI();
+		order = new OrderUI();
+	}
+	
+	public static void toMenu() {
+		setScene(menu.getScene());
 	}
 }
