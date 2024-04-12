@@ -3,9 +3,11 @@ package menu;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import application.Main;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
@@ -14,6 +16,9 @@ import item.MenuItem.Type;
 
 public class MenuUI {
 	private TreeView<String> menuTree;
+	private Button backBtn;
+	private Button modifyBtn;
+	public static Menu<MenuItem> menu = populateTree();
 	
 	@SuppressWarnings("unchecked")
 	public Scene getScene() {
@@ -22,10 +27,19 @@ public class MenuUI {
 			Parent root = FXMLLoader.load(getClass().getResource("Menu.fxml"));
 			
 			this.menuTree = (TreeView<String>) root.lookup("#menuTree");
+			this.backBtn = (Button) root.lookup("#backBtn");
+			this.modifyBtn = (Button) root.lookup("#modifyBtn");
 						
-			Menu<MenuItem> menu = populateTree();
 			TreeItem<String> rootItem = this.createMenuTreeRecursive(menu, menu.getRootItem(), null);
 			this.menuTree.setRoot(rootItem);
+			
+			this.backBtn.setOnAction(e -> {
+				Main.toDashboard();
+			});
+			
+			this.modifyBtn.setOnAction(e -> {
+				Main.toMenuModify();
+			});
 
 	        	        
 			scene = new Scene(root);
@@ -66,6 +80,7 @@ public class MenuUI {
 		
 		MenuItem menuItem = new MenuItem("Menu", Type.CATEGORY);
 		MenuItem drinks = new MenuItem("Drinks", Type.CATEGORY);
+		MenuItem food = new MenuItem("Food", Type.CATEGORY);
 		MenuItem coldDrinks = new MenuItem("Cold", Type.CATEGORY);
 		MenuItem hotDrinks = new MenuItem("Hot", Type.CATEGORY);
 		MenuItem coffee = new MenuItem("Coffee", Type.ITEM);
@@ -74,6 +89,7 @@ public class MenuUI {
 		Menu<MenuItem> menu = new Menu<MenuItem>(menuItem);
 		try {
 			menu.addChild(menuItem, drinks);
+			menu.addChild(menuItem, food);
 			menu.addChild(drinks, coldDrinks);
 			menu.addChild(drinks, hotDrinks);
 			menu.addChild(hotDrinks, coffee);

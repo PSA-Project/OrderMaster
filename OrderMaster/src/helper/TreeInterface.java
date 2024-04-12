@@ -7,7 +7,7 @@ public interface TreeInterface<T> {
 	
 	void addChild(T parent, T child) throws Exception;
 
-    boolean removeChild(T parent, T child) throws Exception;
+    boolean remove(T item) throws Exception;
     
     ArrayList<T> getChildren(T parent) throws Exception;
 }
