@@ -17,6 +17,23 @@ public class Menu<T> implements TreeInterface<T> {
 			this.children = new ArrayList<Node>();
 		}
 		
+		Node searchParent(T item) {
+			for(Node child : this.children) {
+				if(child.item.equals(item)) {
+					return this;
+				}
+			}
+			
+			for(Node child : this.children) {				
+				Node parent = child.searchParent(item);
+				if(parent != null) {
+					return parent;
+				}
+			}
+			
+			return null;
+		}
+		
 		Node search(T item) {
 			if(this.item.equals(item)) {
 				return this;
@@ -74,8 +91,8 @@ public class Menu<T> implements TreeInterface<T> {
 	}
 
 	@Override
-	public boolean removeChild(T parent, T child) throws Exception {
-		Node parentFound = this.root.search(parent);
+	public boolean remove(T item) throws Exception {
+		Node parentFound = this.root.searchParent(item);
 		if(parentFound == null) {
 			throw new Exception("Invalid Parent");
 		}
@@ -83,7 +100,7 @@ public class Menu<T> implements TreeInterface<T> {
 		ArrayList<Node> children = parentFound.children;
 		
 		for(int i = 0; i < children.size(); i++) {
-			if(children.get(i).item.equals(child)) {
+			if(children.get(i).item.equals(item)) {
 				parentFound.removeChild(i);
 				return true;
 			}
