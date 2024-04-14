@@ -69,8 +69,6 @@ public class MenuModifyUI {
 				}
 				
 				addMenuItem(this.nameTextField.getText(),this.typeComboBox.getValue());
-				this.statusText.setFill(Color.GREEN);
-				this.statusText.setText("Entry added successfully!");
 				
 				resetMenuComboBox();
 			});
@@ -89,8 +87,6 @@ public class MenuModifyUI {
 				}
 				
 				removeMenuItem();
-				this.statusText.setFill(Color.GREEN);
-				this.statusText.setText("Entry removed successfully!");
 				
 				resetMenuComboBox();
 			});
@@ -186,6 +182,8 @@ public class MenuModifyUI {
 			MenuItem.Type entryType = type.equals(MenuItem.Type.CATEGORY.getStringValue()) ? MenuItem.Type.CATEGORY : MenuItem.Type.ITEM;
 			MenuItem newItem = new MenuItem(menuEntry, entryType);
 			MenuUI.menu.addChild(latestSelectedMenuItem, newItem);
+			this.statusText.setFill(Color.GREEN);
+			this.statusText.setText("Entry added successfully!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -193,7 +191,11 @@ public class MenuModifyUI {
 	
 	public void removeMenuItem() {
 		try {
-			MenuUI.menu.remove(latestSelectedMenuItem);
+			boolean isRemoved = MenuUI.menu.remove(latestSelectedMenuItem);
+			if(isRemoved) {
+				this.statusText.setFill(Color.GREEN);
+				this.statusText.setText("Entry removed successfully!");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
