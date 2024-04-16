@@ -1,4 +1,5 @@
 module OrderMaster {
+	exports order;
 	requires javafx.controls;
 	requires javafx.graphics;
 	requires javafx.fxml;

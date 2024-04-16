@@ -87,10 +87,11 @@ public class OrderUI {
 
         if (selectedOrderItem != null) {
             // Pass the selected order item to the OrderModifyUI class for modification
-            OrderModifyUI orderModifyUI = new OrderModifyUI(selectedOrderItem);
+            OrderModifyUI orderModifyUI = new OrderModifyUI(selectedOrderItem, menu);
             //orderModifyUI.setSelectedOrderItem(selectedOrderItem); // Set the selected order item
            // orderModifyUI.setMenu(menu); // Set the menu object if needed
-            Main.toOrderModify((orderModifyUI.getScene()));
+            Main.toOrderModify(selectedOrderItem, menu);
+
         } else {
             // Show an error message or handle the case where no order item is selected
         }

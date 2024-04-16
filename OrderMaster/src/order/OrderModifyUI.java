@@ -28,9 +28,14 @@ public class OrderModifyUI {
     private Text statusText;
     private OrderItem<MenuItem> selectedOrderItem;
     private Menu<MenuItem> menu;
+    
+    public OrderModifyUI() {
+    	
+    }
 
-    public OrderModifyUI(OrderItem<MenuItem> selectedOrderItem) {
+    public OrderModifyUI(OrderItem<MenuItem> selectedOrderItem, Menu<MenuItem> menu) {
         this.selectedOrderItem = selectedOrderItem;
+        this.menu = menu;
     }
 
     public void setSelectedOrderItem(OrderItem<MenuItem> selectedOrderItem) {

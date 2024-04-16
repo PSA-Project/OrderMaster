@@ -1,9 +1,12 @@
 package application;
 	
 import dashboard.Dashboard;
+import item.MenuItem;
+import item.OrderItem;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import menu.MenuUI;
+import menu.Menu;
 import menu.MenuModifyUI;
 import order.OrderModifyUI;
 import order.OrderUI;
@@ -46,7 +49,7 @@ public class Main extends Application {
 		menu = new MenuUI();
 		menuModify = new MenuModifyUI();
 		order = new OrderUI(null);
-		orderModify = new OrderModifyUI(null);
+		orderModify = new OrderModifyUI(null, null);
 	}
 	
 	public static void toMenu() {
@@ -65,8 +68,9 @@ public class Main extends Application {
 		setScene(order.getScene());
 	}
 	
-	public static void toOrderModify(Scene scene) {
-		
-		setScene(orderModify.getScene());
+	public static void toOrderModify(OrderItem<MenuItem> selectedOrderItem, Menu<MenuItem> menu) {
+	    orderModify = new OrderModifyUI(selectedOrderItem, menu);
+	    setScene(orderModify.getScene());
 	}
+
 }
