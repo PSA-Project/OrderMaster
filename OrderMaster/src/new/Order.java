@@ -3,21 +3,22 @@ import java.util.LinkedList;
 
 public class Order {
     private Node head;
+    private static int lastId=1000;
     private String status;
     private int id;
 
     public Order(int id) {
         this.head = null;
         this.status = "Pending";
-        this.id = id;
+        this.id = lastId++;
     }
 
-    public int getId() {
-        return id;
+    public static int getLastId() {
+        return lastId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public static void setLastId(int lastId) {
+        Order.lastId = lastId;
     }
 
 
