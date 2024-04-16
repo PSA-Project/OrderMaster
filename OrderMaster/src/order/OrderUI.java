@@ -1,6 +1,6 @@
 package order;
 
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -12,46 +12,45 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import menu.Menu;
+import menu.MenuUI;
+
 import java.io.IOException;
 import application.Main;
 import item.MenuItem;
 import item.OrderItem;
 
 public class OrderUI {
-    private TableView<OrderItem<MenuItem>> ordersTable;
+    private TableView<Order> ordersTable;
     private Button backBtn;
     private Button newOrderBtn;
     private Button modifyOrderBtn;
-    private Order order;
-    private ObservableList<OrderItem<MenuItem>> orderItems = FXCollections.observableArrayList();
-	private Menu<MenuItem> menu;
+    private OrderHashMap<Integer, Order> orderHashMap = new OrderHashMap<>();
     
-    public OrderUI(Menu<MenuItem> menu) {
-        this.menu = menu;
-    }
-
     @SuppressWarnings("unchecked")
     public Scene getScene() {
         Scene scene = null;
         try {
             Parent root = FXMLLoader.load(getClass().getResource("Order.fxml"));
 
-            this.ordersTable = (TableView<OrderItem<MenuItem>>) root.lookup("#ordersTable");
+            this.ordersTable = (TableView<Order>) root.lookup("#ordersTable");
             this.backBtn = (Button) root.lookup("#backBtn");
             this.newOrderBtn = (Button) root.lookup("#newOrderBtn");
             this.modifyOrderBtn = (Button) root.lookup("#modifyOrderBtn");
 
             // Initialize the table columns
-            TableColumn<OrderItem<MenuItem>, String> nameColumn = new TableColumn<>("Name");
-            nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getItem().getName()));
+            TableColumn<Order, Integer> idColumn = new TableColumn<>("Id");
+//            idColumn.setCellValueFactory(data -> data.getValue().getId());
 
-            TableColumn<OrderItem<MenuItem>, Double> priceColumn = new TableColumn<>("Price");
+            TableColumn<Order, Double> priceColumn = new TableColumn<>("Price");
             priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-            TableColumn<OrderItem<MenuItem>, Integer> quantityColumn = new TableColumn<>("Quantity");
+            
+            TableColumn<Order, Integer> quantityColumn = new TableColumn<>("Quantity");
             quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-            TableColumn<OrderItem<MenuItem>, String> statusColumn = new TableColumn<>("Status");
+            
+            TableColumn<Order, String> statusColumn = new TableColumn<>("Status");
             statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-            this.ordersTable.getColumns().addAll(nameColumn, priceColumn, quantityColumn, statusColumn);
+            
+            this.ordersTable.getColumns().addAll(idColumn, priceColumn, quantityColumn, statusColumn);
 
             // Set event handlers
             this.backBtn.setOnAction(e -> {
@@ -63,11 +62,9 @@ public class OrderUI {
             });
 
             this.modifyOrderBtn.setOnAction(e -> {
-                modifySelectedOrder(menu);
+                modifySelectedOrder(MenuUI.menu);
             });
 
-            // Create a new order
-            order = new Order();
             populateOrderTable();
 
             scene = new Scene(root);
@@ -77,20 +74,19 @@ public class OrderUI {
         return scene;
     }
 
-    private void createNewOrder() {
-        // Implement functionality to create a new order
+    private Order createNewOrder() {
+        Order order = new Order();
+        orderHashMap.put(order.getId(), order);
+        return order;
     }
 
     private void modifySelectedOrder(Menu<MenuItem> menu) {
         // Retrieve the selected order item from the table
-        OrderItem<MenuItem> selectedOrderItem = ordersTable.getSelectionModel().getSelectedItem();
+        Order selectedOrderItem = ordersTable.getSelectionModel().getSelectedItem();
 
         if (selectedOrderItem != null) {
-            // Pass the selected order item to the OrderModifyUI class for modification
-            OrderModifyUI orderModifyUI = new OrderModifyUI(selectedOrderItem);
-            //orderModifyUI.setSelectedOrderItem(selectedOrderItem); // Set the selected order item
-           // orderModifyUI.setMenu(menu); // Set the menu object if needed
-            Main.toOrderModify((orderModifyUI.getScene()));
+//            OrderModifyUI orderModifyUI = new OrderModifyUI(selectedOrderItem);
+//            Main.toOrderModify(orderModifyUI.getScene());
         } else {
             // Show an error message or handle the case where no order item is selected
         }
@@ -101,21 +97,10 @@ public class OrderUI {
         // Add items to the order and update the table
         try {
             // Hardcoded items
-            MenuItem item1 = new MenuItem("Coffee", MenuItem.Type.ITEM);
-            MenuItem item2 = new MenuItem("Pizza", MenuItem.Type.ITEM);
-            MenuItem item3 = new MenuItem("Burger", MenuItem.Type.ITEM);
-
-            // Clear the existing items before adding new ones
-            orderItems.clear();
-
-            // Add the new items to the order
-            order.addItem(new OrderItem<>(item1, 2.5, 2, order.getStatus()));
-            order.addItem(new OrderItem<>(item2, 10.0, 1, order.getStatus()));
-            order.addItem(new OrderItem<>(item3, 5.0, 1, order.getStatus()));
-
-            // Update the orders table with the new order items
-            orderItems.addAll(order.getItems());
-            ordersTable.setItems(orderItems);
+        	
+        	Order order = createNewOrder();
+        	            
+            ordersTable.setItems(FXCollections.observableList(orderHashMap.getValues()));
 
         } catch (Exception e) {
             e.printStackTrace();

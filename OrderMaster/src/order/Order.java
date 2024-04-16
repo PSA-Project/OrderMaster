@@ -1,32 +1,50 @@
 package order;
 
-import java.util.ArrayList;
-
 import item.OrderItem;
 
 public class Order {
     private Node head;
-    private double totalPrice;
+    private static int lastId=1000;
     private String status;
+    private int id;
 
     public Order() {
         this.head = null;
-        this.totalPrice = 0.0;
         this.status = "Pending";
+        this.id = lastId++;
     }
 
+    public static int getLastId() {
+        return lastId;
+    }
+
+    public static void setLastId(int lastId) {
+        Order.lastId = lastId;
+    }
+
+
     private static class Node {
-        private OrderItem data;
+        private OrderItem orderItem;
+        private int quantity;
         private Node next;
 
-        public Node(OrderItem data) {
-            this.data = data;
+        public Node(OrderItem orderItem, int quantity) {
+            this.orderItem = orderItem;
+            this.quantity = quantity;
             this.next = null;
+        }
+
+        @Override
+        public String toString() {
+            return "{" +
+                    "orderItem=" + orderItem +
+                    ", quantity=" + quantity +
+                    '}';
         }
     }
 
-    public void addItem(OrderItem orderItem) {
-        Node newNode = new Node(orderItem);
+    public void addItem(OrderItem orderItem, int quantity) {
+        Node newNode = new Node(orderItem, quantity);
         if (head == null) {
             head = newNode;
         } else {
@@ -36,39 +54,63 @@ public class Order {
             }
             current.next = newNode;
         }
-        totalPrice += orderItem.getPrice() * orderItem.getQuantity(); // Update total price with quantity
     }
 
-    public void removeItem(OrderItem item) {
+    public void removeItem(OrderItem orderItem) {
         if (head == null) {
             return;
         }
-        if (head.data.equals(item)) {
+        if (head.orderItem.equals(orderItem)) {
             head = head.next;
         } else {
             Node current = head;
             while (current.next != null) {
-                if (current.next.data.equals(item)) {
+                if (current.next.orderItem.equals(orderItem)) {
                     current.next = current.next.next;
                     break;
                 }
                 current = current.next;
             }
         }
-        totalPrice -= item.getPrice() * item.getQuantity(); // Update total price with quantity
     }
 
-    public OrderItem[] getItems() {
-        ArrayList<OrderItem> itemsList = new ArrayList<>();
-        Node current = head;
-        while (current != null) {
-            itemsList.add(current.data);
-            current = current.next;
+    public void modifyQuantity(OrderItem orderItem, int newQuantity) {
+        if (head == null) {
+            return;
         }
-        return itemsList.toArray(new OrderItem[0]); // Convert ArrayList to array
+        else {
+            Node current = head;
+            while (current != null) {
+                if (current.orderItem.equals(orderItem)) {
+                    current.quantity = newQuantity;
+                    break;
+                }
+                current = current.next;
+            }
+        }
     }
+
+
+//    public void getItems() {
+//        ArrayList<ArrayList<OrderItem>, Integer> itemsList = new ArrayList<>();
+//        Node current = head;
+//        while (current != null) {
+//            System.out.println(current.orderItem + " " +  current.quantity);
+//            itemsList.add(current);
+//            current = current.next;
+//        }
+////        return itemsList;
+//    }
+
+
 
     public double getTotalPrice() {
+        double totalPrice = 0;
+        Node current = head;
+        while (current != null) {
+            totalPrice += current.orderItem.getPrice() * current.quantity;
+            current = current.next;
+        }
         return totalPrice;
     }
 
@@ -79,4 +121,25 @@ public class Order {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        Node current = head;
+
+        while (current != null) {
+            sb.append(current.toString());
+            if (current.next != null) {
+                sb.append(", ");
+            }
+            current = current.next;
+        }
+
+        sb.append("]");
+        return sb.toString();
+    }
+
+	public int getId() {
+		return id;
+	}
 }
