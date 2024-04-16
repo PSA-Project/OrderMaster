@@ -3,16 +3,13 @@ package order;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import menu.Menu;
 import menu.MenuUI;
@@ -40,6 +37,7 @@ public class OrderUI {
             this.newOrderBtn = (Button) root.lookup("#newOrderBtn");
             this.modifyOrderBtn = (Button) root.lookup("#modifyOrderBtn");
 
+            this.ordersTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             // Initialize the table columns
             TableColumn<Order, Integer> idColumn = new TableColumn<>("Id");
             idColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
@@ -50,7 +48,10 @@ public class OrderUI {
             TableColumn<Order, String> statusColumn = new TableColumn<>("Status");
             statusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
             
-            this.ordersTable.getColumns().addAll(idColumn, priceColumn, statusColumn);
+            TableColumn<Order, String> itemColumn = new TableColumn<>("Items");
+            itemColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getItems()));
+            
+            this.ordersTable.getColumns().addAll(idColumn, priceColumn, statusColumn, itemColumn);
 
             // Set event handlers
             this.backBtn.setOnAction(e -> {
@@ -76,7 +77,12 @@ public class OrderUI {
 
     private Order createNewOrder() {
         Order order = new Order();
+        order.addItem(new OrderItem("abcd",12), 10);
+        order.addItem(new OrderItem("ggwp",12), 5);
+        order.addItem(new OrderItem("ggwp",12), 5);
+        order.addItem(new OrderItem("ggwp",12), 5);
         orderHashMap.put(order.getId(), order);
+        ordersTable.setItems(FXCollections.observableList(orderHashMap.getValues()));
         return order;
     }
 
@@ -97,11 +103,8 @@ public class OrderUI {
         // Add items to the order and update the table
         try {
             // Hardcoded items
-        	
-        	Order order = createNewOrder();
+        	createNewOrder();
         	            
-            ordersTable.setItems(FXCollections.observableList(orderHashMap.getValues()));
-
         } catch (Exception e) {
             e.printStackTrace();
         }

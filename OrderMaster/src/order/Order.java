@@ -91,16 +91,15 @@ public class Order {
     }
 
 
-//    public void getItems() {
-//        ArrayList<ArrayList<OrderItem>, Integer> itemsList = new ArrayList<>();
-//        Node current = head;
-//        while (current != null) {
-//            System.out.println(current.orderItem + " " +  current.quantity);
-//            itemsList.add(current);
-//            current = current.next;
-//        }
-////        return itemsList;
-//    }
+    public String getItems() {
+        String items="";
+        Node current = head;
+        while (current != null) {
+            items += current.orderItem.getItemName() + " x " +  current.quantity + "\n";
+            current = current.next;
+        }
+        return items;
+    }
 
 
 
