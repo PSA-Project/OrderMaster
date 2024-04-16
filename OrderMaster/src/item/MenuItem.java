@@ -28,14 +28,17 @@ public class MenuItem {
 	private double price;
 	
 	public MenuItem(String name, Type type) {
-		this.name = name;
-		this.type = type;
+		this(name, type, 0);
 	}
 	
-	public MenuItem(String name, Type item, double price) {
+	public MenuItem(String name, Type type, double price) {
 		this.name = name;
 		this.type = type;
-		this.price = price;
+		if(type == MenuItem.Type.ITEM) {
+			this.price = price;
+		} else {
+			this.price = 0;
+		}
 	}
 
 	public String getName() {
