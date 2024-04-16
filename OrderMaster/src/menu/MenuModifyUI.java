@@ -26,6 +26,7 @@ public class MenuModifyUI {
 	private Button removeBtn;
 	private static final String defaultComboBoxValue = "--NO SELECTION--";
 	private Text statusText;
+	private TextField priceTextField;
 
 	@SuppressWarnings("unchecked")
 	public Scene getScene() {
@@ -40,6 +41,7 @@ public class MenuModifyUI {
 			this.addBtn = (Button) root.lookup("#addBtn");
 			this.removeBtn = (Button) root.lookup("#removeBtn");
 			this.statusText = (Text) root.lookup("#statusText");
+			this.priceTextField = (TextField) root.lookup("#priceTextField");
 			
 			this.backBtn.setOnAction(e -> {
 				Main.toMenu();
@@ -66,6 +68,20 @@ public class MenuModifyUI {
 				if(latestSelectedMenuItem.getType() == MenuItem.Type.ITEM) {
 					this.statusText.setText("Parent for the new entry must be a category");
 					return;
+				}
+				
+				if(this.typeComboBox.getValue().equals(MenuItem.Type.ITEM.getStringValue())) {
+					if(this.priceTextField.getText().isEmpty()) {
+						this.statusText.setText("Price field cannot be empty");
+						return;
+					}
+					
+					try {
+						Double.parseDouble(this.priceTextField.getText());
+					} catch (NumberFormatException numFormatException) {
+						this.statusText.setText("Invalid price value");
+						return;
+					}
 				}
 				
 				addMenuItem(this.nameTextField.getText(),this.typeComboBox.getValue());
@@ -109,6 +125,7 @@ public class MenuModifyUI {
 		this.typeComboBox.getItems().add(MenuItem.Type.ITEM.getStringValue());
 		
 		this.nameTextField.clear();
+		this.priceTextField.clear();
 		
 		for(ComboBox<String> comboBox: this.menuHboxArray) {
 			this.modifyMenuVbox.getChildren().remove(comboBox);
@@ -180,7 +197,12 @@ public class MenuModifyUI {
 	public void addMenuItem(String menuEntry, String type) {
 		try {
 			MenuItem.Type entryType = type.equals(MenuItem.Type.CATEGORY.getStringValue()) ? MenuItem.Type.CATEGORY : MenuItem.Type.ITEM;
-			MenuItem newItem = new MenuItem(menuEntry, entryType);
+			MenuItem newItem = null;
+			if(entryType == MenuItem.Type.CATEGORY) {
+				newItem = new MenuItem(menuEntry, entryType);
+			} else {
+				newItem = new MenuItem(menuEntry, entryType, Double.parseDouble(this.priceTextField.getText()));
+			}
 			MenuUI.menu.addChild(latestSelectedMenuItem, newItem);
 			this.statusText.setFill(Color.GREEN);
 			this.statusText.setText("Entry added successfully!");

@@ -54,8 +54,14 @@ public class MenuUI {
 	}
 	
 	private TreeItem<String> createMenuTreeRecursive(Menu<MenuItem> menu, MenuItem parent, TreeItem<String> item) {
+		TreeItem<String> treeItem = null;
 		
-		TreeItem<String> treeItem = new TreeItem<String>(parent.getName());
+		if(parent.getType() == MenuItem.Type.CATEGORY) {
+			treeItem = new TreeItem<String>(parent.getName());
+		} else {
+			treeItem = new TreeItem<String>(parent.getName() + " ($" + parent.getPrice() + ")");
+		}
+		
 		treeItem.setExpanded(true);
 		
 		if(item != null) {
@@ -83,10 +89,10 @@ public class MenuUI {
 		MenuItem food = new MenuItem("Food", Type.CATEGORY);
 		MenuItem coldDrinks = new MenuItem("Cold", Type.CATEGORY);
 		MenuItem hotDrinks = new MenuItem("Hot", Type.CATEGORY);
-		MenuItem coffee = new MenuItem("Coffee", Type.ITEM);
-		MenuItem coke = new MenuItem("Coke", Type.ITEM);
-		MenuItem pizza = new MenuItem("Pizza", Type.ITEM);
-		MenuItem burger = new MenuItem("Burger", Type.ITEM);
+		MenuItem coffee = new MenuItem("Coffee", Type.ITEM, 4);
+		MenuItem coke = new MenuItem("Coke", Type.ITEM, 3);
+		MenuItem pizza = new MenuItem("Pizza", Type.ITEM, 10);
+		MenuItem burger = new MenuItem("Burger", Type.ITEM, 9);
 		
 		Menu<MenuItem> menu = new Menu<MenuItem>(menuItem);
 		try {
