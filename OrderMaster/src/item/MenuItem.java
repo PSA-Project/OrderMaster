@@ -25,12 +25,19 @@ public class MenuItem {
 	
 	private String name;
 	private Type type;
+	private double price;
 	
 	public MenuItem(String name, Type type) {
 		this.name = name;
 		this.type = type;
 	}
 	
+	public MenuItem(String name, Type item, double price) {
+		this.name = name;
+		this.type = type;
+		this.price = price;
+	}
+
 	public String getName() {
 		return this.name;
 	}
@@ -39,7 +46,21 @@ public class MenuItem {
 		return this.type;
 	}
 	
+	
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
 	public boolean equals(MenuItem item) {
 		return this.name.equals(item.name) && this.type.typeInt == item.type.typeInt;
 	}
+	
+	@Override
+    public String toString() {
+        return this.name;
+    }
 }

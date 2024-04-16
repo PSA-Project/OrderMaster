@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import menu.MenuUI;
 import menu.MenuModifyUI;
+import order.OrderModifyUI;
 import order.OrderUI;
 import javafx.scene.Scene;
 
@@ -15,6 +16,8 @@ public class Main extends Application {
 	private static MenuUI menu;
 	private static MenuModifyUI menuModify;
 	private static OrderUI order;
+	private static OrderModifyUI orderModify;
+	
 	
 	@Override
 	public void start(Stage primaryStage) {		
@@ -42,7 +45,8 @@ public class Main extends Application {
 		dashboard = new Dashboard();
 		menu = new MenuUI();
 		menuModify = new MenuModifyUI();
-		order = new OrderUI();
+		order = new OrderUI(null);
+		orderModify = new OrderModifyUI(null);
 	}
 	
 	public static void toMenu() {
@@ -55,5 +59,14 @@ public class Main extends Application {
 	
 	public static void toMenuModify() {
 		setScene(menuModify.getScene());
+	}
+	
+	public static void toOrder() {
+		setScene(order.getScene());
+	}
+	
+	public static void toOrderModify(Scene scene) {
+		
+		setScene(orderModify.getScene());
 	}
 }

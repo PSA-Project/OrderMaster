@@ -85,6 +85,8 @@ public class MenuUI {
 		MenuItem hotDrinks = new MenuItem("Hot", Type.CATEGORY);
 		MenuItem coffee = new MenuItem("Coffee", Type.ITEM);
 		MenuItem coke = new MenuItem("Coke", Type.ITEM);
+		MenuItem pizza = new MenuItem("Pizza", Type.ITEM);
+		MenuItem burger = new MenuItem("Burger", Type.ITEM);
 		
 		Menu<MenuItem> menu = new Menu<MenuItem>(menuItem);
 		try {
@@ -94,6 +96,8 @@ public class MenuUI {
 			menu.addChild(drinks, hotDrinks);
 			menu.addChild(hotDrinks, coffee);
 			menu.addChild(coldDrinks, coke);
+			menu.addChild(food, pizza);
+			menu.addChild(food, burger);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
