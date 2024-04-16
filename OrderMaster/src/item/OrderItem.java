@@ -1,67 +1,51 @@
 package item;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
-public class OrderItem<T> {
-    private T item;
-    private double price;
-    private int quantity;
-    private String status;
+public class OrderItem {
+  private String itemName;
+  private double price;
 
-    public OrderItem(T item, double price, int quantity, String status) {
-        this.item = item;
-        this.price = price;
-        this.quantity = quantity;
-        this.status = status;
-    }
 
-    public T getItem() {
-        return item;
-    }
+  public OrderItem(String itemName, double price) {
+    this.itemName = itemName;
+    this.price = price;
+  }
 
-    public void setItem(T item) {
-        this.item = item;
-    }
+  public String getItemName() {
+    return itemName;
+  }
 
-    public double getPrice() {
-        return price;
-    }
+  public void setItemName(String itemName) {
+    this.itemName = itemName;
+  }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+  public double getPrice() {
+    return price;
+  }
 
-    public int getQuantity() {
-        return quantity;
-    }
+  public void setPrice(double price) {
+    this.price = price;
+  }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+  @Override
+  public String toString() {
+    return "OrderItem{" +
+            "itemName='" + itemName + '\'' +
+            ", price=" + price +
+            '}';
+  }
 
-    public String getStatus() {
-        return status;
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    OrderItem orderItem = (OrderItem) o;
+    return Objects.equals(itemName, orderItem.itemName);
+  }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-    
-    // Method to add all items from a collection to the existing list
-    public void addAll(Collection<OrderItem<T>> items) {
-        for (OrderItem<T> item : items) {
-            this.item = item.getItem();
-            this.price += item.getPrice();
-            this.quantity += item.getQuantity();
-            this.status = item.getStatus();
-        }
-    }
-    
-    @Override
-    public String toString() {
-        return Objects.toString(item); // Use Objects.toString() to handle null items
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(itemName);
+  }
 }

@@ -13,6 +13,7 @@ import application.Main;
 import item.MenuItem;
 import item.OrderItem;
 import menu.Menu;
+import menu.MenuUI;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,27 +27,22 @@ public class OrderModifyUI {
     private Button saveBtn;
     private Button cancelBtn;
     private Text statusText;
-    private OrderItem<MenuItem> selectedOrderItem;
-    private Menu<MenuItem> menu;
+    private Order selectedOrder;
 
-    public OrderModifyUI(OrderItem<MenuItem> selectedOrderItem) {
-        this.selectedOrderItem = selectedOrderItem;
+    public OrderModifyUI(Order selectedOrder) {
+        this.selectedOrder = selectedOrder;
     }
 
-    public void setSelectedOrderItem(OrderItem<MenuItem> selectedOrderItem) {
-        this.selectedOrderItem = selectedOrderItem;
-    }
-
-    public void setMenu(Menu<MenuItem> menu) {
-        this.menu = menu;
-        populateItemNameComboBox();  // Populate item name ComboBox when menu is set
+    public void setSelectedOrder(Order selectedOrder) {
+        this.selectedOrder = selectedOrder;
     }
 
     public Scene getScene() {
         Scene scene = null;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("OrderModify.fxml"));
-            Parent root = loader.load();
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("OrderModify.fxml"));
+//            Parent root = loader.load();
+            Parent root = FXMLLoader.load(getClass().getResource("OrderModify.fxml"));
             scene = new Scene(root);
 
             backBtn = (Button) root.lookup("#backBtn");
@@ -66,10 +62,8 @@ public class OrderModifyUI {
             statusComboBox.getItems().addAll("Pending", "In Progress", "Completed");
 
             // Populate fields with selected order item data
-            if (selectedOrderItem != null) {
-                itemNameComboBox.setValue(selectedOrderItem.getItem());
-                quantityTextField.setText(String.valueOf(selectedOrderItem.getQuantity()));
-                statusComboBox.setValue(selectedOrderItem.getStatus());
+            if (selectedOrder != null) {
+                statusComboBox.setValue(selectedOrder.getStatus());
             }
 
             populateItemNameComboBox();
@@ -81,21 +75,20 @@ public class OrderModifyUI {
     }
 
     private void populateItemNameComboBox() {
-        if (menu != null) {
-            ArrayList<MenuItem> allItems = new ArrayList<>();
-            collectAllItems(menu.getRootItem(), allItems);
-            itemNameComboBox.getItems().setAll(allItems);
-        } else {
-            System.out.println("Menu is null");
-        }
+    	ArrayList<MenuItem> allItems = new ArrayList<>();
+        collectAllItems(MenuUI.menu.getRootItem(), allItems);
+        itemNameComboBox.getItems().setAll(allItems);
     }
 
     private void collectAllItems(MenuItem parent, ArrayList<MenuItem> allItems) {
         if (parent != null) {
             try {
-				ArrayList<MenuItem> children = menu.getChildren(parent);
-				allItems.addAll(children);
+				ArrayList<MenuItem> children = MenuUI.menu.getChildren(parent);
+				
 				for (MenuItem child : children) {
+					if(child.getType() == MenuItem.Type.ITEM){
+						allItems.add(child);
+					}
 				    collectAllItems(child, allItems);
 				}
 			} catch (Exception e) {
@@ -106,11 +99,11 @@ public class OrderModifyUI {
     }
 
     private void modifyOrder() {
-        if (selectedOrderItem != null) {
+        if (selectedOrder != null) {
             try {
                 int newQuantity = Integer.parseInt(quantityTextField.getText());
-                selectedOrderItem.setQuantity(newQuantity);
-                selectedOrderItem.setStatus(statusComboBox.getValue());
+//                selectedOrderItem.setQuantity(newQuantity);
+                selectedOrder.setStatus(statusComboBox.getValue());
 
                 statusText.setText("Order modified successfully!");
                 statusText.setFill(Color.GREEN);

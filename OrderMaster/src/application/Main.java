@@ -45,8 +45,7 @@ public class Main extends Application {
 		dashboard = new Dashboard();
 		menu = new MenuUI();
 		menuModify = new MenuModifyUI();
-		order = new OrderUI(null);
-		orderModify = new OrderModifyUI(null);
+		order = new OrderUI();
 	}
 	
 	public static void toMenu() {
@@ -66,7 +65,6 @@ public class Main extends Application {
 	}
 	
 	public static void toOrderModify(Scene scene) {
-		
-		setScene(orderModify.getScene());
+		setScene(scene);
 	}
 }
