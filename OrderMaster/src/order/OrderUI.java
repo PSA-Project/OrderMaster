@@ -1,5 +1,8 @@
 package order;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,18 +42,15 @@ public class OrderUI {
 
             // Initialize the table columns
             TableColumn<Order, Integer> idColumn = new TableColumn<>("Id");
-//            idColumn.setCellValueFactory(data -> data.getValue().getId());
+            idColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
 
             TableColumn<Order, Double> priceColumn = new TableColumn<>("Price");
-            priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-            
-            TableColumn<Order, Integer> quantityColumn = new TableColumn<>("Quantity");
-            quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+            priceColumn.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getTotalPrice()).asObject());
             
             TableColumn<Order, String> statusColumn = new TableColumn<>("Status");
-            statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+            statusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
             
-            this.ordersTable.getColumns().addAll(idColumn, priceColumn, quantityColumn, statusColumn);
+            this.ordersTable.getColumns().addAll(idColumn, priceColumn, statusColumn);
 
             // Set event handlers
             this.backBtn.setOnAction(e -> {
