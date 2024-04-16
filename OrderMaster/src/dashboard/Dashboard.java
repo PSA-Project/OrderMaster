@@ -24,6 +24,10 @@ public class Dashboard {
 				Main.toMenu();
 			});
 			
+			this.orderBtn.setOnAction(e -> {
+				Main.toOrder();
+			});
+			
 			
 			scene = new Scene(root);
 		} catch (IOException e) {
