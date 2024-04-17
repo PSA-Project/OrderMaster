@@ -2,6 +2,10 @@ package order;
 
 import item.OrderItem;
 
+import java.util.ArrayList;
+
+import item.CustomItem;
+
 public class Order {
     private Node head;
     private static int lastId=1000;
@@ -77,8 +81,9 @@ public class Order {
     public void modifyQuantity(OrderItem orderItem, int newQuantity) {
         if (head == null) {
             return;
-        }
-        else {
+        } else if (newQuantity == 0) {
+        	removeItem(orderItem);
+        } else {
             Node current = head;
             while (current != null) {
                 if (current.orderItem.equals(orderItem)) {
@@ -101,7 +106,16 @@ public class Order {
         return items;
     }
 
-
+    public ArrayList<CustomItem> toArray() {
+    	ArrayList<CustomItem> arr = new ArrayList<CustomItem>();
+        Node current = head;
+        while (current != null) {
+        	CustomItem item = new CustomItem(current.orderItem, current.quantity);
+        	arr.add(item);
+        	current = current.next;
+        }
+        return arr;
+    }
 
     public double getTotalPrice() {
         double totalPrice = 0;

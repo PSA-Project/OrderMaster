@@ -24,7 +24,7 @@ public class OrderUI {
     private Button backBtn;
     private Button newOrderBtn;
     private Button modifyOrderBtn;
-    private OrderHashMap<Integer, Order> orderHashMap = new OrderHashMap<>();
+    private static OrderHashMap<Integer, Order> orderHashMap = new OrderHashMap<>();
     
     @SuppressWarnings("unchecked")
     public Scene getScene() {
@@ -52,6 +52,8 @@ public class OrderUI {
             itemColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getItems()));
             
             this.ordersTable.getColumns().addAll(idColumn, priceColumn, statusColumn, itemColumn);
+            
+            ordersTable.setItems(FXCollections.observableList(orderHashMap.getValues()));
 
             // Set event handlers
             this.backBtn.setOnAction(e -> {
@@ -66,8 +68,6 @@ public class OrderUI {
                 modifySelectedOrder(MenuUI.menu);
             });
 
-            populateOrderTable();
-
             scene = new Scene(root);
         } catch (IOException e) {
             e.printStackTrace();
@@ -77,10 +77,6 @@ public class OrderUI {
 
     private Order createNewOrder() {
         Order order = new Order();
-        order.addItem(new OrderItem("abcd",12), 10);
-        order.addItem(new OrderItem("ggwp",12), 5);
-        order.addItem(new OrderItem("ggwp",12), 5);
-        order.addItem(new OrderItem("ggwp",12), 5);
         orderHashMap.put(order.getId(), order);
         ordersTable.setItems(FXCollections.observableList(orderHashMap.getValues()));
         return order;
@@ -91,10 +87,8 @@ public class OrderUI {
         Order selectedOrderItem = ordersTable.getSelectionModel().getSelectedItem();
 
         if (selectedOrderItem != null) {
-//            OrderModifyUI orderModifyUI = new OrderModifyUI(selectedOrderItem);
-//            Main.toOrderModify(orderModifyUI.getScene());
-        } else {
-            // Show an error message or handle the case where no order item is selected
+            OrderModifyUI orderModifyUI = new OrderModifyUI(selectedOrderItem);
+            Main.toOrderModify(orderModifyUI.getScene());
         }
     }
 
