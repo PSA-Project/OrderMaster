@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import application.Main;
+import item.CustomItem;
 import item.MenuItem;
 import item.OrderItem;
 import menu.Menu;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 
 public class OrderModifyUI {
     private Button backBtn;
-    private VBox modifyOrderVbox;
     private ComboBox<MenuItem> itemNameComboBox;  // Changed to ComboBox<MenuItem>
     private TextField quantityTextField;
     private ComboBox<String> statusComboBox;
@@ -28,6 +28,7 @@ public class OrderModifyUI {
     private Button cancelBtn;
     private Text statusText;
     private Order selectedOrder;
+    private OrderItem selectedItem;
 
     public OrderModifyUI(Order selectedOrder) {
         this.selectedOrder = selectedOrder;
@@ -46,7 +47,6 @@ public class OrderModifyUI {
             scene = new Scene(root);
 
             backBtn = (Button) root.lookup("#backBtn");
-            modifyOrderVbox = (VBox) root.lookup("#modifyOrderVbox");
             itemNameComboBox = (ComboBox<MenuItem>) root.lookup("#itemNameComboBox");
             quantityTextField = (TextField) root.lookup("#quantityTextField");
             statusComboBox = (ComboBox<String>) root.lookup("#statusComboBox");
@@ -78,6 +78,19 @@ public class OrderModifyUI {
     	ArrayList<MenuItem> allItems = new ArrayList<>();
         collectAllItems(MenuUI.menu.getRootItem(), allItems);
         itemNameComboBox.getItems().setAll(allItems);
+        itemNameComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+        	ArrayList<CustomItem> arr = selectedOrder.toArray();
+        	for(CustomItem item : arr) {
+        		if(newValue.getName().equals(item.getItem().getItemName())) {
+        			this.quantityTextField.setText(String.valueOf(item.getQuantity()));
+                	selectedItem = item.getItem();
+        			return;
+        		}
+        	}
+        	
+        	this.quantityTextField.setText(String.valueOf(0));
+        	selectedItem = null;
+        });
     }
 
     private void collectAllItems(MenuItem parent, ArrayList<MenuItem> allItems) {
@@ -101,8 +114,18 @@ public class OrderModifyUI {
     private void modifyOrder() {
         if (selectedOrder != null) {
             try {
-                int newQuantity = Integer.parseInt(quantityTextField.getText());
-//                selectedOrderItem.setQuantity(newQuantity);
+            	
+            	if(itemNameComboBox.getValue() != null) {
+            		int newQuantity = Integer.parseInt(quantityTextField.getText());
+                    
+                    if(selectedItem == null) {
+                        OrderItem newItem = new OrderItem(itemNameComboBox.getValue().getName(), itemNameComboBox.getValue().getPrice());
+                        selectedOrder.addItem(newItem, newQuantity);
+                    } else {
+                        selectedOrder.modifyQuantity(selectedItem, newQuantity);
+                    }
+            	}
+                
                 selectedOrder.setStatus(statusComboBox.getValue());
 
                 statusText.setText("Order modified successfully!");

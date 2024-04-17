@@ -52,7 +52,7 @@
                         <ComboBox fx:id="statusComboBox" prefWidth="150.0" />
                     </children>
                 </HBox>
-                <HBox spacing="10.0">
+                <HBox alignment="CENTER" spacing="100.0">
                     <children>
                         <Button fx:id="saveBtn" mnemonicParsing="false" style="-fx-background-color: lightgreen;" text="Save" />
                         <Button fx:id="cancelBtn" mnemonicParsing="false" style="-fx-background-color: coral;" text="Cancel" />
