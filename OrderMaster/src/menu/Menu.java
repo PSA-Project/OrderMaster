@@ -8,7 +8,7 @@ public class Menu<T> implements TreeInterface<T> {
 	
 	private Node root;
 	
-	class Node {
+	private class Node {
 		private T item;
 		private ArrayList<Node> children;
 		
