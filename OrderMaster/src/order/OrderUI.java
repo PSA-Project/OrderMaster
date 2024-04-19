@@ -84,10 +84,10 @@ public class OrderUI {
 
     private void modifySelectedOrder(Menu<MenuItem> menu) {
         // Retrieve the selected order item from the table
-        Order selectedOrderItem = ordersTable.getSelectionModel().getSelectedItem();
+        Order selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
 
-        if (selectedOrderItem != null) {
-            OrderModifyUI orderModifyUI = new OrderModifyUI(selectedOrderItem);
+        if (selectedOrder != null) {
+            OrderModifyUI orderModifyUI = new OrderModifyUI(selectedOrder);
             Main.toOrderModify(orderModifyUI.getScene());
         }
     }

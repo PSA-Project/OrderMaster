@@ -15,9 +15,7 @@ public class Main extends Application {
 	private static Dashboard dashboard;
 	private static MenuUI menu;
 	private static MenuModifyUI menuModify;
-	private static OrderUI order;
-	private static OrderModifyUI orderModify;
-	
+	private static OrderUI order;	
 	
 	@Override
 	public void start(Stage primaryStage) {		

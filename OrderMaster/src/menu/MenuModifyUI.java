@@ -19,7 +19,7 @@ public class MenuModifyUI {
 	private Button backBtn;
 	private VBox modifyMenuVbox;
 	private ComboBox<String> typeComboBox;
-	private ArrayList<ComboBox<String>> menuHboxArray;
+	private ArrayList<ComboBox<String>> menuComboBoxArray;
 	private TextField nameTextField;
 	private MenuItem latestSelectedMenuItem;
 	private Button addBtn;
@@ -107,7 +107,7 @@ public class MenuModifyUI {
 				resetMenuComboBox();
 			});
 			
-			this.menuHboxArray = new ArrayList<>();
+			this.menuComboBoxArray = new ArrayList<>();
 			
 			resetMenuComboBox();
 			
@@ -127,11 +127,11 @@ public class MenuModifyUI {
 		this.nameTextField.clear();
 		this.priceTextField.clear();
 		
-		for(ComboBox<String> comboBox: this.menuHboxArray) {
+		for(ComboBox<String> comboBox: this.menuComboBoxArray) {
 			this.modifyMenuVbox.getChildren().remove(comboBox);
 		}
 		
-		this.menuHboxArray.clear();
+		this.menuComboBoxArray.clear();
 		
 		latestSelectedMenuItem = MenuUI.menu.getRootItem();
 		addMenuComboBox(MenuUI.menu, latestSelectedMenuItem);
@@ -167,10 +167,10 @@ public class MenuModifyUI {
 				}
 				
 				boolean isFound = false;
-				for(Object comboBox: this.menuHboxArray.toArray()) {
+				for(Object comboBox: this.menuComboBoxArray.toArray()) {
 					if(isFound) {
 						this.modifyMenuVbox.getChildren().remove(comboBox);
-						this.menuHboxArray.remove(comboBox);
+						this.menuComboBoxArray.remove(comboBox);
 					}
 					
 					if(!isFound && comboBox == menuComboBox) {
@@ -186,8 +186,8 @@ public class MenuModifyUI {
 				}
 	        });
 			
-			this.menuHboxArray.add(menuComboBox);
-			this.modifyMenuVbox.getChildren().add(this.menuHboxArray.size() - 1, menuComboBox);
+			this.menuComboBoxArray.add(menuComboBox);
+			this.modifyMenuVbox.getChildren().add(this.menuComboBoxArray.size() - 1, menuComboBox);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
